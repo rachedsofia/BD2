@@ -38,8 +38,8 @@ class VientosPatagonicasTest {
         descuentos.add(promocionMarca);
         carrito.agregarProducto(producto1);
         carrito.agregarProducto(producto2);
-        ServicioPago servicioPago = new ServicioPago();
-        Venta venta = servicioPago.procesarPago(carrito, tarjeta, descuentos);
+        ProcesoDePago procesoDePago = new ProcesoDePago();
+        Venta venta = procesoDePago.procesarPago(carrito, tarjeta, descuentos);
         Assertions.assertEquals(3000, venta.getMontoTotal());
     }
 
@@ -51,8 +51,8 @@ class VientosPatagonicasTest {
         descuentos.add(promocionMarca);
         carrito.agregarProducto(producto1);
         carrito.agregarProducto(producto2);
-        ServicioPago servicioPago = new ServicioPago();
-        Venta venta = servicioPago.procesarPago(carrito, tarjeta, descuentos);
+        ProcesoDePago procesoDePago = new ProcesoDePago();
+        Venta venta = procesoDePago.procesarPago(carrito, tarjeta, descuentos);
         Assertions.assertEquals(2950, venta.getMontoTotal()); // Descuento del 5% aplicado solo a producto1
     }
     /*Calcular el monto total del carrito con un descuento vigente del tipo
@@ -63,8 +63,8 @@ de Medio de pago.*/
         descuentos.add(promocionMedioDePago);
         carrito.agregarProducto(producto1);
         carrito.agregarProducto(producto2);
-        ServicioPago servicioPago = new ServicioPago();
-        Venta venta = servicioPago.procesarPago(carrito, tarjeta, descuentos);
+        ProcesoDePago procesoDePago = new ProcesoDePago();
+        Venta venta = procesoDePago.procesarPago(carrito, tarjeta, descuentos);
         Assertions.assertEquals(2760, venta.getMontoTotal()); // Descuento del 8% aplicado al total
     }
     /* Calcular el monto total del carrito con dos descuentos vigentes, sobre productos marca Comarca y para tarjeta de crédito MemeCard.*/
@@ -76,8 +76,8 @@ de Medio de pago.*/
         descuentos.add(promocionMedioDePago);
         carrito.agregarProducto(producto1);
         carrito.agregarProducto(producto2);
-        ServicioPago servicioPago = new ServicioPago();
-        Venta venta = servicioPago.procesarPago(carrito, tarjeta, descuentos);
+        ProcesoDePago procesoDePago = new ProcesoDePago();
+        Venta venta = procesoDePago.procesarPago(carrito, tarjeta, descuentos);
         Assertions.assertEquals(2576, venta.getMontoTotal());
     }
 
@@ -88,8 +88,8 @@ de Medio de pago.*/
     void testRealizarPagoYVerificarVentaGenerada() {
         carrito.agregarProducto(producto1);
         carrito.agregarProducto(producto2);
-        ServicioPago servicioPago = new ServicioPago();
-        Venta venta = servicioPago.procesarPago(carrito, tarjeta, descuentos);
+        ProcesoDePago procesoDePago = new ProcesoDePago();
+        Venta venta = procesoDePago.procesarPago(carrito, tarjeta, descuentos);
         Assertions.assertNotNull(venta);
         Assertions.assertEquals(cliente, venta.getCliente());
         Assertions.assertEquals(3000, venta.getMontoTotal());

@@ -32,12 +32,11 @@ public class Carrito {
         return total;
     }
 
-
-    public Cliente getCliente() {
+    public Cliente obtenerCliente() {
         return cliente;
     }
 
-    public List<Producto> getProductos() {
+    public List<Producto> obtenerProductos() {
         return misProductos;
     }
 }

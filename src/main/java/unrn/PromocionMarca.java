@@ -14,7 +14,7 @@ public class PromocionMarca extends Descuento {
 
     @Override
     public double aplicar(Producto producto, double precioProducto) {
-        if (estaVigente() && producto.getDescripcion().contains(marca)) {
+        if (estaVigente() && producto.containsMarca(marca)) { //producto.getDescripcion().contains(marca)
             return precioProducto * (porcentaje / 100);
 
         }

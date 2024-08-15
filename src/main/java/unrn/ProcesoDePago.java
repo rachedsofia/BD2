@@ -2,12 +2,12 @@ package unrn;
 
 import java.util.List;
 
-public class ServicioPago {
+public class ProcesoDePago {
 
     public Venta procesarPago(Carrito carrito, Tarjeta tarjeta, List<Descuento> descuentos) {
             double total = 0;
 
-            for (Producto producto : carrito.getProductos()) {
+            for (Producto producto : carrito.obtenerProductos()) {
                 double precioProducto = producto.getPrecio();
                 for (Descuento descuento : descuentos) {
                     if ((descuento instanceof PromocionMarca promocionMarca)) {
@@ -28,7 +28,7 @@ public class ServicioPago {
         if (!tarjeta.tieneFondosSuficientes(total)) {
             throw new RuntimeException("Fondos insuficientes");
         }
-            Venta venta = new Venta(carrito.getCliente(), carrito.getProductos(), total);
+            Venta venta = new Venta(carrito.obtenerCliente(), carrito.obtenerProductos(), total);
             return venta;
         }
 }

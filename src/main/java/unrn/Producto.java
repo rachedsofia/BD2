@@ -20,11 +20,15 @@ public class Producto {
         return precio;
     }
 
-    public String getDescripcion() {
+   /* public String getDescripcion() {
         return descripcion;
-    }
+    }*/
 
     public String getCategoria() {
         return miCategoria;
+    }
+
+    public boolean containsMarca(String marca){
+        return this.descripcion.contains(marca);
     }
 }
