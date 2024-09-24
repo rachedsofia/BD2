@@ -1,15 +1,18 @@
 package ar.unrn.tp.servicios;
 
 import ar.unrn.tp.api.DescuentoService;
+import ar.unrn.tp.excepciones.DescuentoEx;
 import ar.unrn.tp.modelo.Descuento;
 import ar.unrn.tp.modelo.PromocionMarca;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 @Service
+@RequiredArgsConstructor
 public class JPADescuentoServices implements DescuentoService {
     private final EntityManager em;
 
@@ -28,7 +31,7 @@ public class JPADescuentoServices implements DescuentoService {
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
-            throw new RuntimeException(e);
+            throw new DescuentoEx("No se pudo crear el descuento"+ e.getMessage());
         } finally {
             if (em != null && em.isOpen()) {
                 em.close();

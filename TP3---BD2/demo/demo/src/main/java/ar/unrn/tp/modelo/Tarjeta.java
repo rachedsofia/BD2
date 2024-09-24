@@ -18,7 +18,7 @@ public class Tarjeta {
     private Integer codigo1;
     private String marca;
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
     protected Tarjeta() {

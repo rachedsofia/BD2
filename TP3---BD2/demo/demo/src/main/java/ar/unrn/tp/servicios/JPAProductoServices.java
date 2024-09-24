@@ -1,10 +1,12 @@
 package ar.unrn.tp.servicios;
 
 import ar.unrn.tp.api.ProductoService;
+import ar.unrn.tp.excepciones.ProductoEx;
 import ar.unrn.tp.modelo.Producto;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +29,10 @@ public class JPAProductoServices implements ProductoService {
             Producto producto = new Producto(codigo, descripcion, IdCategoria, precio);
             em.persist(producto);
             tx.commit();
+
         } catch (Exception e) {
-            tx.rollback();
-            throw new RuntimeException(e);
-        } finally {
+            throw new ProductoEx("Error al crear el producto: " + e.getMessage());
+        }finally {
             if (em != null && em.isOpen()) {
                 em.close();
             }
@@ -49,9 +51,11 @@ public class JPAProductoServices implements ProductoService {
             producto.setPrecio(4);
             producto.setMiCategoria("a");
             tx.commit();
+        } catch (NoResultException e) {
+            throw new ProductoEx("No se encontró ningún producto.");
+
         } catch (Exception e) {
-            tx.rollback();
-            throw new RuntimeException(e);
+            throw new ProductoEx("Error al actualizar el producto: " + e.getMessage());
         } finally {
             if (em != null && em.isOpen()) {
                 em.close();
@@ -60,6 +64,7 @@ public class JPAProductoServices implements ProductoService {
     }
 
     @Override
+
     public List listarProductos() {
         return em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
 

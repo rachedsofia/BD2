@@ -17,7 +17,7 @@ public class Cliente {
     private String apellido;
     private String dni;
     private String email;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientes")
     private List<Tarjeta> tarjetaCred;
 
     protected Cliente() {

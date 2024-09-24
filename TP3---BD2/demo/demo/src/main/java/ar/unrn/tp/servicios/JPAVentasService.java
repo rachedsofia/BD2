@@ -3,10 +3,16 @@ package ar.unrn.tp.servicios;
 import ar.unrn.tp.api.ClienteService;
 import ar.unrn.tp.api.ProductoService;
 import ar.unrn.tp.api.VentaService;
+import ar.unrn.tp.excepciones.AplicacionEx;
+import ar.unrn.tp.excepciones.ClienteEx;
+import ar.unrn.tp.excepciones.TarjetaEx;
+import ar.unrn.tp.excepciones.VentaEx;
 import ar.unrn.tp.modelo.*;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.NonUniqueResultException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +34,12 @@ public class JPAVentasService implements VentaService {
 
     @Override
     public void realizarVenta(Long idCliente, List<Long> productos, Long idTarjeta) {
+        if (idCliente == null)
+            throw new ClienteEx("El id del cliente es nulo: " + idCliente);
+
+        if(idTarjeta == null)
+            throw new TarjetaEx("El id de la tarjeta es nulo: " + idTarjeta);
+
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -48,10 +60,15 @@ public class JPAVentasService implements VentaService {
             Venta venta = procesoDePago.procesarPago(carrito, tarjeta, descuentos);
             em.persist(venta);
             tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            throw new RuntimeException(e);
-        } finally {
+        } catch (NoResultException e){
+            throw new AplicacionEx("No se econtraron resultados para el id de cliente o la tarjeta: " + e.getMessage());
+
+        } catch (NonUniqueResultException e) {
+            throw new AplicacionEx("Se encontraron múltiples resultados para este ID de clientes o tarjeta: " + e.getMessage());
+
+        }catch (Exception e) {
+            throw new VentaEx("Error al querer realizazr la venta: " + e.getMessage());
+        }finally {
             /*
              * if (em != null && em.isOpen()) {
              * em.close();
@@ -70,11 +87,9 @@ public class JPAVentasService implements VentaService {
         Carrito carrito = new Carrito(null);
         listaProductos.forEach(carrito::agregarProducto);
 
-        // Obtener los descuentos activos
         List<Descuento> descuentos = em.createQuery("SELECT d FROM Descuento d WHERE d.activo = true", Descuento.class)
                 .getResultList();
 
-        // Calcular monto total aplicando descuentos
 
         double montoTotal = 0.0;
         for (Producto producto : listaProductos) {

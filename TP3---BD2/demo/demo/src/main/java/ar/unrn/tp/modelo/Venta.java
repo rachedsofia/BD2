@@ -17,7 +17,7 @@ public class Venta {
     private Long Id;
     private LocalDate fechaYHora;
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "venta")
